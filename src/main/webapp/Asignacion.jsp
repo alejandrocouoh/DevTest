@@ -34,14 +34,14 @@
                     IPrivilegios ipermisos = new Privilegioscontroller();
                     List<Privilegios> lprivilegios = ipermisos.privilegios();
                     IRolUser iru = new RolUsercontroller();
-                    RolUser ru = iru.findbyId(valor);
+                    RolUser ru = iru.findbyId(valor);   
         %>
         <div class="container-sm">
             <h1><strong>Asignacion de modulos.</strong></h1>
         </div>
         
         <div class="container-sm">
-            <form method="post" action="PermisosServlet">
+            <form method="get" action="PermisosServlet">
                 <div class="mt-5">
                     <label class="form-label">Nombre del rol:  <% out.println(ru.getRolName()); %></label>
                 </div>
@@ -68,24 +68,24 @@
                 
                             <%   
                                 int j = 0;
-                                    List<Privilegios> permisos_asignados = new ArrayList<>();
-                                    if (request.getParameter("Alta") != null) {// Se verifica si se hace click en el boton
-                                        for (Privilegios privelege : lprivilegios) {//Se recorre  la lista de opciones ya asigandas
-                                            if (selector != null) {
-                                                if (request.getParameter(selector[j]) != null) {//Se verifica si las cajas de opciones estan seleccionadas
-                                                    permisos_asignados.add(privelege);
+                                        List<Privilegios> permisos_asignados = new ArrayList<>();
+                                        if (request.getParameter("Alta") != null) {// Se verifica si se hace click en el boton
+                                            for (Privilegios privelege : lprivilegios) {//Se recorre  la lista de opciones ya asigandas
+                                                if (selector != null) {
+                                                    if (request.getParameter(selector[j]) != null) {//Se verifica si las cajas de opciones estan seleccionadas
+                                                        permisos_asignados.add(privelege);//Se agrega a la lista nueva de permisos seleccionados
+                                                    }
                                                 }
+                                                j++;
                                             }
-                                            j++;
+                                            sesion.setAttribute("permisos", permisos_asignados);//se envian los permisos al servlet
+                                            sesion.setAttribute("identificador", ru);// se envian los roles al servlet
                                         }
-                                        sesion.setAttribute("permisos", permisos_asignados);
-                                        sesion.setAttribute("rol_user", ru);
+                                        
+                                    } catch (Exception e) {
+                                        out.println(e.getMessage());
                                     }
-                                    
-
-                                } catch (Exception e) {
-                                    out.println(e.getMessage());
-                                }
+                        //sesion.setAttribute("rol", "valor");
                             %>
 
             </form>
@@ -93,7 +93,8 @@
                             <div class="mt-3">
                                 <div class="alert alert-warning" role="alert">
                                     <label><% 
-                                            String mensaje = request.getParameter("mensaje");
+                                            //String mensaje = request.getParameter("mensaje");
+                                            String mensaje =  (String) sesion.getAttribute("mensaje");
                                             if(mensaje!=null) out.println(mensaje);
                                         %></label><br>
                                </div>
