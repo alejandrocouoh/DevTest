@@ -5,13 +5,16 @@
 package repositorios;
 
 import Modelo.RolUser;
-import Modelo.UserRouserPK;
+import java.util.List;
 
 /**
  *
- * @author Towhi
+ * @author Alejandro Couoh Haas <your.name at your.org>
  */
 public interface IRolUser {
-    UserRouserPK save(UserRouserPK userRPK);
-    RolUser findvyId(int id);
+    RolUser save(RolUser u);
+    RolUser edit(RolUser u);
+    RolUser findbyId(int id);
+    List<RolUser> rol_users();
+    boolean delete(int id);
 }

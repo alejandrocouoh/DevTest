@@ -20,7 +20,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author Towhi
+ * @author Alejandro Couoh Haas <your.name at your.org>
  */
 @Entity
 @Table(name = "rol_user")

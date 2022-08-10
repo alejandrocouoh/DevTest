@@ -16,7 +16,7 @@ import repositorios.IAccontsUser;
  */
 public class AccontsUsercontroller implements IAccontsUser{
 
-    private EntityManager emf;
+    private final EntityManager emf;
     
     public AccontsUsercontroller(){
         emf = Connectiondb.conection();

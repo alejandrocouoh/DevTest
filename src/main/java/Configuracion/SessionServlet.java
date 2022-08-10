@@ -54,11 +54,11 @@ public class SessionServlet extends HttpServlet {
         usuario = users.findbyId(cuenta.getIdAccont());//hace la consulta con el identioficador de usuario designado
         
         interface_rol_usuario = new RolUsercontroller();
-        rol_usuario = interface_rol_usuario.findvyId(usuario.getIdUser());
+        rol_usuario = interface_rol_usuario.findbyId(usuario.getIdUser());
         
         if(rol_usuario.getRolName().equals("Administrador")) 
             menu = "<button class=\"btn btn-sm btn-outline-secondary\" type=\"button\"><a rel=\"stylesheet\" href=\"AltaUsuarios.jsp\"/>Crear Usuario</a></button>"
-                    + "<button class=\"btn btn-sm btn-outline-secondary\" type=\"button\"><link rel=\"stylesheet\" href=\"AltaRoles\"/>Crear Rol de Usuario</button>";
+                    + "<button class=\"btn btn-sm btn-outline-secondary\" type=\"button\"><a rel=\"stylesheet\" href=\"AltaRoles.jsp\"/>Crear Rol de Usuario</a></button>";
         if(rol_usuario.getRolName().equals("Empleado"))
             menu = "<button class=\"btn btn-sm btn-outline-secondary\" type=\"button\"><link rel=\"stylesheet\" href=\"url\"/>Buscar</button>";
         if(rol_usuario.getRolName().equals("Invitado"))

@@ -92,7 +92,6 @@ public class Usercontroller implements IUser {
         }catch(Exception e){
             System.out.println("Mensaje de error: "+e.getMessage());
         }
-    
     }
 
     

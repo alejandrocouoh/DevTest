@@ -4,6 +4,8 @@
  */
 package Controlador.vistas;
 
+import Controlador.RolUsercontroller;
+import Modelo.RolUser;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -12,6 +14,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import repositorios.IRolUser;
 
 /**
  *
@@ -22,6 +25,10 @@ public class RolesServlet extends HttpServlet {
 
     private HttpSession sesion;
     private String html_etiqueta;
+    private String verificar_valor;
+    private IRolUser irol_user;
+    private RolUser rol_user;
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -36,16 +43,18 @@ public class RolesServlet extends HttpServlet {
         
         sesion = request.getSession();
         
-        if (request.getParameter("rol") != null) {
-            html_etiqueta = "<div class=\"container-sm\"><label>Introdusca un nombre de Rol.</label></div>";
-            sesion.setAttribute("etiqueta", html_etiqueta);
-            response.sendRedirect("AltaRoles.jsp");
-        } else {
-            html_etiqueta = "<div class=\"container-sm\"><label>Registro exitoso.</label></div>";
-            sesion.setAttribute("etiqueta", html_etiqueta);
-            response.sendRedirect("AltaRoles.jsp");
-        }
-            
+        verificar_valor = (String) sesion.getAttribute("rol");
+        
+        irol_user = new RolUsercontroller();
+        
+        rol_user = new RolUser();
+        rol_user.setRolName(verificar_valor);
+        irol_user.save(rol_user);
+        html_etiqueta = "<div class=\"alert alert-success\" role=\"alert\"><label>Rol " + irol_user.save(rol_user).getRolName() + ", !Ingresado¡</label></div>";
+        sesion.setAttribute("etiqueta", html_etiqueta);
+        response.sendRedirect("AltaRoles.jsp");
+        
+
         response.setContentType("text/html;charset=UTF-8");
         try ( PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
