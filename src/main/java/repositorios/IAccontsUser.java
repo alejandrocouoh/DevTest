@@ -5,8 +5,10 @@
 package repositorios;
 
 
+import Modelo.AccontsUsers;
 import Modelo.AccontsUsersPK;
 import Modelo.User;
+import java.util.List;
 
 /**
  *
@@ -16,7 +18,10 @@ public interface IAccontsUser {
     
     AccontsUsersPK save(AccontsUsersPK pk);
     User findbyId(int id);
-    //List<Acconts> users();
-    //void delete(int i);
+    int findbyIdUser(int id);
+    List<AccontsUsers> users();
+    void delete(int i);
+    AccontsUsers save(AccontsUsers AU);
+    void close();
     
 }

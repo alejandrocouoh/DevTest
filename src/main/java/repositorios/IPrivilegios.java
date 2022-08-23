@@ -18,5 +18,6 @@ public interface IPrivilegios{
     Privilegios findbyId(int id);
     void delete(Privilegios p);
     public List<Privilegios> privilegios();
+    void close();
     
 }

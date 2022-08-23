@@ -4,7 +4,7 @@
  */
 package repositorios;
 
-import Modelo.PrivRol;
+import Modelo.RolPrivilegio;
 import java.util.List;
 
 /**
@@ -13,11 +13,12 @@ import java.util.List;
  */
 public interface IPrivRol {
     
-    PrivRol save(PrivRol PR);
-    PrivRol edit(PrivRol PR);
-    List<PrivRol> findAll();
-    PrivRol findbyIdRol(int id);
-    List<PrivRol> findbyId(int id);
+    RolPrivilegio save(RolPrivilegio PR);
+    RolPrivilegio edit(RolPrivilegio PR);
+    List<RolPrivilegio> findAll();
+    List<RolPrivilegio> findbyIdRol(int id);
+    List<RolPrivilegio> findbyId(int id);
     void delete(int id);
+    void closeSession();
     
 }

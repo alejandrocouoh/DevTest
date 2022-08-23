@@ -19,4 +19,5 @@ public interface IAconts {
     Acconts findbyEmail(String email);
     List<Acconts> users();
     void delete(int i);
+    void closeSesion();
 }

@@ -18,5 +18,6 @@ public interface IUser {
     User findbyId(int id);
     List<User> users();
     void delete(int i);
+    void closeSession();
     
 }

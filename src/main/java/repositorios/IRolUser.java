@@ -17,4 +17,5 @@ public interface IRolUser {
     RolUser findbyId(int id);
     List<RolUser> rol_users();
     boolean delete(int id);
+    void close();
 }
