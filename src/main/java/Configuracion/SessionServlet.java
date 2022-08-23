@@ -4,6 +4,8 @@
  */
 package Configuracion;
 
+import Controlador.AccontsUsercontroller;
+import Controlador.Accontscotroller;
 import Controlador.RolUsercontroller;
 import Controlador.Usercontroller;
 import Modelo.Acconts;
@@ -17,6 +19,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import repositorios.IAccontsUser;
+import repositorios.IAconts;
 import repositorios.IRolUser;
 import repositorios.IUser;
 
@@ -34,6 +38,7 @@ public class SessionServlet extends HttpServlet {
     private IRolUser interface_rol_usuario;
     private RolUser rol_usuario;
     private String menu;
+    private IAccontsUser relacion;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -46,18 +51,21 @@ public class SessionServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        response.setContentType("text/html;charset=UTF-8");
+        //response.setContentType("text/html;charset=UTF-8");
         sesion = request.getSession(); //Se obtiene la sesion
         cuenta = (Acconts) sesion.getAttribute("cuenta");//se recibe la cuenta como parametro
+        relacion = new AccontsUsercontroller();
+        
+        int id_user = relacion.findbyIdUser(cuenta.getIdAccont());
         
         users = new Usercontroller();//Apertura de BD para buscar un usuario
-        usuario = users.findbyId(cuenta.getIdAccont());//hace la consulta con el identioficador de usuario designado
-        
+        usuario = users.findbyId(id_user);//hace la consulta con el identificador de usuario designado
+
         interface_rol_usuario = new RolUsercontroller();
         rol_usuario = interface_rol_usuario.findbyId(usuario.getIdUser());
         
         if(rol_usuario.getRolName().equals("Administrador")) 
-            menu = "<button class=\"btn btn-sm btn-outline-secondary\" type=\"button\"><a rel=\"stylesheet\" href=\"AltaUsuarios.jsp\"/>Crear Usuario</a></button>"
+            menu = "<button class=\"btn btn-sm btn-outline-secondary\" type=\"button\"><a rel=\"stylesheet\" href=\"Usuarios.jsp\"/>Ver Usuarios</a></button>"
                     + "<button class=\"btn btn-sm btn-outline-secondary\" type=\"button\"><a rel=\"stylesheet\" href=\"AltaRoles.jsp\"/>Crear Rol de Usuario</a></button>";
         if(rol_usuario.getRolName().equals("Empleado"))
             menu = "<button class=\"btn btn-sm btn-outline-secondary\" type=\"button\"><link rel=\"stylesheet\" href=\"url\"/>Buscar</button>";
@@ -79,6 +87,7 @@ public class SessionServlet extends HttpServlet {
         }else{
             response.sendRedirect("home.jsp");
         }
+        
         try ( PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
