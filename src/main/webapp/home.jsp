@@ -37,7 +37,7 @@
                  <form class="container-fluid justify-content-start">
                      <% out.println(menu); %>
                      <button class="btn btn-outline-success me-2" type="button" name="cerrar"><a href="index.jsp">Cerrar Sesion</a></button>
-                     <% if(request.getParameter("cerrar")!=null)
+                     <% if(request.getParameter("cerrar")!= null)
                             sesion.invalidate();
                      %>
                  </form>
@@ -52,5 +52,14 @@
                              <br>
                          </h1>
                      </div>
+                             <% 
+                                        sesion.setAttribute("loguin", "1");//Atributios de sesion definido para loguerse.
+                                        sesion.setAttribute("cuenta", cuenta);//Atributios de sesion definido para las cuentas de usuario.
+                                        sesion.setAttribute("usuario", usuario);//Atributios de sesion definido para los usuario.
+                                        sesion.setAttribute("rol", rol_usuario);//Atributios de sesion definido para los roles de usuario.
+                                        sesion.setAttribute("nav", menu);
+                                        sesion.setMaxInactiveInterval(cuenta.getSession());//Tienpo maximo de sesion inactiva  definina al usuario.
+
+                             %>
     </body>
 </html>
