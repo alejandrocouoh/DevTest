@@ -4,28 +4,30 @@
  */
 package Controlador.vistas;
 
-import Controlador.PrivRolController;
-import Modelo.Privilegios;
-import Modelo.RolPrivilegio;
-import Modelo.RolUser;
+import Controlador.AccontsUsercontroller;
+import Controlador.Accontscotroller;
+import Controlador.Usercontroller;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import repositorios.IPrivRol;
+import repositorios.IAccontsUser;
+import repositorios.IAconts;
+import repositorios.IUser;
 
 /**
  *
  * @author Alejandro Couoh Haas <your.name at your.org>
  */
-@WebServlet(name = "PermisosServlet", urlPatterns = {"/PermisosServlet"})
-public class PermisosServlet extends HttpServlet {
+@WebServlet(name = "EliminarUsuarioCuenta", urlPatterns = {"/EliminarUsuarioCuenta"})
+public class EliminarUsuarioCuenta extends HttpServlet {
 
+    private String html_etiqueta;
+    private HttpSession sesion;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -37,52 +39,35 @@ public class PermisosServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
- 
-        HttpSession sesion = request.getSession();
-        
-       List<Privilegios> privilegios_usuario = (List) sesion.getAttribute("permisos");
-       RolUser rol = (RolUser) sesion.getAttribute("identificador");
-       
-        
-        IPrivRol pr = new PrivRolController();
-        RolPrivilegio opr = new RolPrivilegio();
-        
-        String mensaje = null;
-        
-        if (pr.findbyIdRol(rol.getIdRoll()).isEmpty()) {
-            for (Privilegios permiso : privilegios_usuario) {
-                opr.setIdRol(rol.getIdRoll());
-                opr.setIdPrivilegio(permiso.getIdPrivilegio());
-                pr.save(opr);
-            }
-            mensaje = "Se guardaron los modulos de " + rol.getRolName();
-            sesion.setAttribute("id", String.valueOf(rol.getIdRoll()));
-            sesion.setAttribute("mensaje", mensaje);
-            response.sendRedirect("Asignacion.jsp");
-        } else {
-            for (Privilegios permiso : privilegios_usuario) {
-                opr.setIdRol(rol.getIdRoll());
-                opr.setIdPrivilegio(permiso.getIdPrivilegio());
-                pr.edit(opr);
-            }
-            mensaje = "Se actulizaron los modulos de " + rol.getRolName();
-            sesion.setAttribute("id", String.valueOf(rol.getIdRoll()));
-            sesion.setAttribute("mensaje", mensaje);
-            response.sendRedirect("Asignacion.jsp");
-        }
-        
-        response.setContentType("text/html;charset=UTF-8");
+        sesion = request.getSession();
+        String id_usuario = (String) request.getParameter("id_u");
+        String id_cuenta = (String) request.getParameter("id_cuenta");
+        int valor_usuario = Integer.valueOf(id_usuario);
+        int valor_cuenta = Integer.valueOf(id_cuenta);
+        IUser iru = new Usercontroller();
+        IAconts cuenta = new Accontscotroller();
+        IAccontsUser relacion_tabla = new AccontsUsercontroller();
+        String mensaje = "cuenta eliminada";
+        iru.delete(valor_usuario);
+
+        cuenta.delete(valor_cuenta);
+        relacion_tabla.delete(valor_usuario);
+                iru.closeSession();
+                cuenta.closeSesion();
+                relacion_tabla.close();
+        html_etiqueta = "<div class=\"alert alert-danger\" role=\"alert\"><label>" + mensaje + ", !ELIMINADO¡</label></div>";
+        sesion.setAttribute("etiqueta", html_etiqueta);
+        response.sendRedirect("Usuarios.jsp");
+        //response.setContentType("text/html;charset=UTF-8");
         try ( PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet PermisosServlet</title>");            
+            out.println("<title>Servlet EliminarUsuarioCuenta</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet PermisosServlet at " + request.getContextPath() + "</h1>");
-            //out.println("<h1>Servlet PermisosServlet at "+ rol.getIdRoll() + "</h1><br/>");
-            //out.println("<h1>Servlet PermisosServlet at "+ rol.getRolName() + "</h1>");
+            out.println("<h1>Servlet EliminarUsuarioCuenta at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -115,11 +100,6 @@ public class PermisosServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
-        
-       
-                response.setContentType("text/html;charset=UTF-8");
-     
-        
     }
 
     /**

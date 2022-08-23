@@ -4,12 +4,12 @@
  */
 package Controlador.vistas;
 
-import Controlador.PrivRolController;
-import Modelo.Privilegios;
-import Modelo.RolPrivilegio;
+import Controlador.RolUsercontroller;
 import Modelo.RolUser;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,15 +17,17 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import repositorios.IPrivRol;
+import repositorios.IRolUser;
 
 /**
  *
  * @author Alejandro Couoh Haas <your.name at your.org>
  */
-@WebServlet(name = "PermisosServlet", urlPatterns = {"/PermisosServlet"})
-public class PermisosServlet extends HttpServlet {
+@WebServlet(name = "EliminarRol", urlPatterns = {"/EliminarRol"})
+public class EliminarRol extends HttpServlet {
 
+    private String html_etiqueta;
+    private HttpSession sesion;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -37,52 +39,28 @@ public class PermisosServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
- 
-        HttpSession sesion = request.getSession();
+        sesion = request.getSession();
+        String id = (String) request.getParameter("id");
+        int valor = Integer.valueOf(id);
+        IRolUser iru = new RolUsercontroller();
+          
+//        String rol = iru.findbyId(valor).getRolName();
+        iru.delete(valor);
+             
+//        html_etiqueta = "<div class=\"alert alert-danger\" role=\"alert\"><label>Rol " + rol + ", !ELIMINADO¡</label></div>";
+//        sesion.setAttribute("etiqueta", html_etiqueta);
+        response.sendRedirect("AltaRoles.jsp");
         
-       List<Privilegios> privilegios_usuario = (List) sesion.getAttribute("permisos");
-       RolUser rol = (RolUser) sesion.getAttribute("identificador");
-       
-        
-        IPrivRol pr = new PrivRolController();
-        RolPrivilegio opr = new RolPrivilegio();
-        
-        String mensaje = null;
-        
-        if (pr.findbyIdRol(rol.getIdRoll()).isEmpty()) {
-            for (Privilegios permiso : privilegios_usuario) {
-                opr.setIdRol(rol.getIdRoll());
-                opr.setIdPrivilegio(permiso.getIdPrivilegio());
-                pr.save(opr);
-            }
-            mensaje = "Se guardaron los modulos de " + rol.getRolName();
-            sesion.setAttribute("id", String.valueOf(rol.getIdRoll()));
-            sesion.setAttribute("mensaje", mensaje);
-            response.sendRedirect("Asignacion.jsp");
-        } else {
-            for (Privilegios permiso : privilegios_usuario) {
-                opr.setIdRol(rol.getIdRoll());
-                opr.setIdPrivilegio(permiso.getIdPrivilegio());
-                pr.edit(opr);
-            }
-            mensaje = "Se actulizaron los modulos de " + rol.getRolName();
-            sesion.setAttribute("id", String.valueOf(rol.getIdRoll()));
-            sesion.setAttribute("mensaje", mensaje);
-            response.sendRedirect("Asignacion.jsp");
-        }
-        
-        response.setContentType("text/html;charset=UTF-8");
+        //response.setContentType("text/html;charset=UTF-8");
         try ( PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet PermisosServlet</title>");            
+            out.println("<title>Servlet EliminarRol</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet PermisosServlet at " + request.getContextPath() + "</h1>");
-            //out.println("<h1>Servlet PermisosServlet at "+ rol.getIdRoll() + "</h1><br/>");
-            //out.println("<h1>Servlet PermisosServlet at "+ rol.getRolName() + "</h1>");
+            out.println("<h1>Servlet EliminarRol at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -115,11 +93,6 @@ public class PermisosServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
-        
-       
-                response.setContentType("text/html;charset=UTF-8");
-     
-        
     }
 
     /**
