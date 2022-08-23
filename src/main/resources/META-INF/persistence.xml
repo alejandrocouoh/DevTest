@@ -5,10 +5,12 @@
     <class>Modelo.User</class>
     <class>Modelo.Acconts</class>
     <class>Modelo.AccontsUsers</class>
+    <class>Modelo.AccontsUsersPK</class>
     <class>Modelo.UserRouser</class>
     <class>Modelo.RolUser</class>
     <class>Modelo.Privilegios</class>
     <class>Modelo.PrivRol</class>
+    <class>Modelo.RolPrivilegio</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3310/dev_test?serverTimezone=UTC"/>
