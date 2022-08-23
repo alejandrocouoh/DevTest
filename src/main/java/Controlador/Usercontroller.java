@@ -29,7 +29,6 @@ public class Usercontroller implements IUser {
             emf.getTransaction().begin();
             emf.persist(user);
             emf.getTransaction().commit();
-            emf.close();
             System.out.println("Guardado");
         } catch (Exception error) {
             System.out.println(error.getMessage());
@@ -45,7 +44,6 @@ public class Usercontroller implements IUser {
             if (emf.contains(user2)) {
                 emf.merge(user);
                 emf.getTransaction().commit();
-                emf.close();
                 System.out.println("Datos Actualizados");
             } else {
                     System.out.println("No se pudo actualizar");
@@ -61,7 +59,6 @@ public class Usercontroller implements IUser {
         User u = null;
         try{
             u = emf.find(User.class, id);
-            emf.close();
         }catch(Exception error){
             System.out.println("Mensaje: "+ error.getMessage());
         }    
@@ -74,7 +71,6 @@ public class Usercontroller implements IUser {
         try{
             Query query = emf.createNamedQuery("User.findAll");
             listusers = query.getResultList();
-            emf.close();
         }catch(Exception e){
             System.out.println(e.getMessage());
         }
@@ -88,10 +84,14 @@ public class Usercontroller implements IUser {
             emf.getTransaction().begin();
             emf.remove(u);
             emf.getTransaction().commit();
-            emf.close();
         }catch(Exception e){
             System.out.println("Mensaje de error: "+e.getMessage());
         }
+    }
+
+    @Override
+    public void closeSession() {
+        emf.close();
     }
 
     

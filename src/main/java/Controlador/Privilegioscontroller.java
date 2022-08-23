@@ -29,7 +29,6 @@ public class Privilegioscontroller implements IPrivilegios{
             emf.getTransaction().begin();
             emf.persist(p);
             emf.getTransaction().commit();
-            emf.close();
             System.out.println("Guardado");
         } catch (Exception error) {
             System.out.println(error.getMessage());
@@ -45,7 +44,6 @@ public class Privilegioscontroller implements IPrivilegios{
             if (emf.contains(permisos)) {
                 emf.merge(p);
                 emf.getTransaction().commit();
-                emf.close();
                 System.out.println("Datos Actualizados");
             } else {
                     System.out.println("No se pudo actualizar");
@@ -61,7 +59,6 @@ public class Privilegioscontroller implements IPrivilegios{
         Privilegios p = null;
         try{
             p = emf.find(Privilegios.class, id);
-            emf.close();
         }catch(Exception error){
             System.out.println("Mensaje: "+ error.getMessage());
         }    
@@ -75,7 +72,6 @@ public class Privilegioscontroller implements IPrivilegios{
             emf.getTransaction().begin();
             emf.remove(permisos);
             emf.getTransaction().commit();
-            emf.close();
         } catch (Exception e) {
             System.out.println("Mensaje de error: " + e.getMessage());
         }
@@ -87,10 +83,14 @@ public class Privilegioscontroller implements IPrivilegios{
         try{
             Query query = emf.createNamedQuery("Privilegios.findAll");
             listusers = query.getResultList();
-            emf.close();
         }catch(Exception e){
             System.out.println(e.getMessage());
         }
         return listusers;
+    }
+
+    @Override
+    public void close() {
+        emf.close();
     }
 }
